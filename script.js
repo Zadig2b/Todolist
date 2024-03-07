@@ -1,13 +1,22 @@
+document.addEventListener('DOMContentLoaded', function () {
+    fetchTasks();
 
-    let listItems = document.querySelectorAll('.list-group-item');
-        listItems.forEach(item => {
-            item.addEventListener('click', function() {
-                listItems.forEach(item => {
-                    item.classList.remove('active');
-                });
-                this.classList.add('active');
+    // Use event delegation for dynamically added elements
+    document.getElementById('taskList').addEventListener('click', function (event) {
+        let target = event.target;
+        // Check if the clicked element has the desired class
+        if (target.classList.contains('list-group-item')) {
+            // Remove 'active' class from all items
+            document.querySelectorAll('.list-group-item').forEach(item => {
+                item.classList.remove('active');
             });
-        });
+            // Add 'active' class to the clicked item
+            target.classList.add('active');
+            console.log("class active added");
+        }
+    });
+
+});
 
         function fetchTasks() {
             fetch('backend.php?action=fetchTasks')
@@ -29,6 +38,7 @@
         
             tasks.forEach(task => {
                 const listItem = document.createElement('li');
+                listItem.classList.add('list-group-item');
                 listItem.innerHTML = `
                     <strong>${task.title}</strong>
                     <p>${task.description}</p>
@@ -37,6 +47,7 @@
                 taskList.appendChild(listItem);
             });
         }
+        
         
 
 function createTaskFromInput() {
@@ -68,7 +79,7 @@ function createTask(title, description, importance) {
     .then(response => response.json())
     .then(result => {
         if (result.message === 'Task created successfully' && result.task) {
-            console.log(result.task); // Log the details of the newly created task
+            console.log(result.task); 
             displayTasks([result.task]);
         } else {
             console.error('Error creating task:', result.error);
@@ -79,9 +90,7 @@ function createTask(title, description, importance) {
  
 
 
-document.addEventListener('DOMContentLoaded', function () {
-    fetchTasks();
-});
+
 
 
 function viewTaskDetails(taskId) {
