@@ -13,8 +13,8 @@ if (isset($_GET['action'])) {
         
             if (isset($data['title'], $data['description'], $data['importance'])) {
                 createTask($data['title'], $data['description'], $data['importance']);
-                $newTaskId = $pdo->lastInsertId();  // Get the ID of the newly inserted task
-                $newTask = getTaskById($newTaskId);  // Retrieve the task details using the ID
+                $newTaskId = $pdo->lastInsertId();  
+                $newTask = getTaskById($newTaskId); 
                 echo json_encode(['message' => 'Task created successfully', 'task' => $newTask]);
             } else {
                 echo json_encode(['error' => 'Invalid data for creating task']);

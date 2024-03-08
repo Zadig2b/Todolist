@@ -1,21 +1,23 @@
 document.addEventListener('DOMContentLoaded', function () {
     fetchTasks();
+});
 
-    // Use event delegation for dynamically added elements
-    document.getElementById('taskList').addEventListener('click', function (event) {
-        let target = event.target;
-        // Check if the clicked element has the desired class
-        if (target.classList.contains('list-group-item')) {
-            // Remove 'active' class from all items
-            document.querySelectorAll('.list-group-item').forEach(item => {
-                item.classList.remove('active');
-            });
-            // Add 'active' class to the clicked item
-            target.classList.add('active');
-            console.log("class active added");
-        }
-    });
+// Use event delegation at the document level for dynamically added elements
+document.addEventListener('click', function (event) {
+    let target = event.target;
+    if (target.classList.contains('list-group-item')) {
+        // Remove 'active' class from all items
+        document.querySelectorAll('.list-group-item').forEach(item => {
+            item.classList.remove('active');
+        });
+        // Add 'active' class to the clicked item
+        target.classList.add('active');
+        console.log("class active added");
 
+        const taskId = target.dataset.taskId; // Assuming you have a data-taskId attribute
+        // Now you can perform additional actions related to the selected task, if needed
+        viewTaskDetails(taskId);
+    }
 });
 
         function fetchTasks() {
@@ -37,10 +39,45 @@ document.addEventListener('DOMContentLoaded', function () {
             const taskList = document.getElementById('taskList');
         
             tasks.forEach(task => {
-                const listItem = document.createElement('li');
+                let listItem = document.createElement('li');
                 listItem.classList.add('list-group-item');
+                let editButton = '<button type="button" class="btn btn-secondary">Edit</button>'    
+                editButton.style = 'position:absolute; right:0px'           
+                let deleteButton = document.createElement('button')
+                deleteButton.innerHTML = 'Delete'
+                deleteButton.setAttribute('data-bs-toggle', 'modal')
+                deleteButton.setAttribute('data-bs-target', '#deleteModal')
+                deleteButton.setAttribute('data-task-id', task.id)
+                listItem.appendChild(deleteButton)
+                listItem.setAttribute('data-task-id', task.id)
+                listItem.setAttribute('data-task-title', task.title)
+                listItem.setAttribute('data-task-description', task.description)
+                listItem.setAttribute('data-task-importance', task.importance)
+                listItem.setAttribute('data-task-status', task.status)
+                listItem.setAttribute('data-task-created-at', task.created_at)
+                listItem.setAttribute('data-task-updated-at', task.updated_at)
+                listItem.setAttribute('data-task-completed-at', task.completed_at)
+
+                let importanceBadge = '';
+                switch (task.importance) {
+                    case 'not_important':
+                        importanceBadge = '<span class="badge text-bg-primary">Normal</span>';
+                        break;
+                    case 'important':
+                        importanceBadge = '<span class="badge text-bg-warning">Important</span>';
+                        break;
+                    case 'urgent':
+                        importanceBadge = '<span class="badge text-bg-danger">Urgent</span>';
+                        break;
+                    default:
+                        break;
+                }
+                
                 listItem.innerHTML = `
+                <div class=liheader>
+                    ${importanceBadge}
                     <strong>${task.title}</strong>
+                    ${editButton}</div>
                     <p>${task.description}</p>
                     <p>Importance: ${task.importance}</p>
                 `;

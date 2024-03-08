@@ -2,6 +2,9 @@ body {
     margin: 20px;
 }
 
+strong {
+    margin: 20px;
+}
 h1, h2 {
     margin-bottom: 20px;
 
@@ -17,4 +20,12 @@ h1, h2 {
 
 
 .list-group-item {
+}
+
+.liheader {
+position: relative;
+}
+.btn {
+    position: absolute;
+    right: 0;
 }
