@@ -14,8 +14,7 @@ document.addEventListener('click', function (event) {
         target.classList.add('active');
         console.log("class active added");
 
-        const taskId = target.dataset.taskId; // Assuming you have a data-taskId attribute
-        // Now you can perform additional actions related to the selected task, if needed
+        const taskId = target.dataset.taskId; 
         viewTaskDetails(taskId);
     }
 });
@@ -43,12 +42,8 @@ document.addEventListener('click', function (event) {
                 listItem.classList.add('list-group-item');
                 let editButton = '<button type="button" class="btn btn-secondary">Edit</button>'    
                 editButton.style = 'position:absolute; right:0px'           
-                let deleteButton = document.createElement('button')
-                deleteButton.innerHTML = 'Delete'
-                deleteButton.setAttribute('data-bs-toggle', 'modal')
-                deleteButton.setAttribute('data-bs-target', '#deleteModal')
-                deleteButton.setAttribute('data-task-id', task.id)
-                listItem.appendChild(deleteButton)
+                let deleteButton = '<button type="button" class="btn btn-danger">x</button>'
+
                 listItem.setAttribute('data-task-id', task.id)
                 listItem.setAttribute('data-task-title', task.title)
                 listItem.setAttribute('data-task-description', task.description)
@@ -57,6 +52,8 @@ document.addEventListener('click', function (event) {
                 listItem.setAttribute('data-task-created-at', task.created_at)
                 listItem.setAttribute('data-task-updated-at', task.updated_at)
                 listItem.setAttribute('data-task-completed-at', task.completed_at)
+                listItem.setAttribute('data-task-complete-on', task.completed_at)
+
 
                 let importanceBadge = '';
                 switch (task.importance) {
@@ -77,9 +74,8 @@ document.addEventListener('click', function (event) {
                 <div class=liheader>
                     ${importanceBadge}
                     <strong>${task.title}</strong>
-                    ${editButton}</div>
-                    <p>${task.description}</p>
-                    <p>Importance: ${task.importance}</p>
+                    ${editButton}${deleteButton}</div>
+                    <p class=description>${task.description}</p>
                 `;
                 taskList.appendChild(listItem);
             });
@@ -91,20 +87,23 @@ function createTaskFromInput() {
     const title = document.getElementById('taskTitle').value;
     const description = document.getElementById('taskDescription').value;
     let importance;
+    let echeance = document.getElementById('taskDate').value;
+    console.log(echeance);
     const radioButtons = document.getElementsByName('taskImportance');
     radioButtons.forEach(radio => {
         if (radio.checked) {
             importance = radio.value;
         }
     });
-    createTask(title, description, importance);
+    createTask(title, description, importance, echeance);
 }
 
-function createTask(title, description, importance) {
+function createTask(title, description, importance, echeance) {
     const taskData = {
         title: title,
         description: description,
-        importance: importance
+        importance: importance,
+        echeance: echeance
     };
     fetch('backend.php?action=createTask', {
         method: 'POST',
@@ -131,14 +130,83 @@ function createTask(title, description, importance) {
 
 
 function viewTaskDetails(taskId) {
+    // Open the Bootstrap modal
+    const taskModal = new bootstrap.Modal(document.getElementById('taskModal'));
+    taskModal.show();
+
+    // Implement AJAX request to fetch task details and display them in the modal
+    fetch(`backend.php?action=getTaskDetails&taskId=${taskId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(taskDetails => {
+            // Display task details in the modal body
+            const taskModalBody = document.getElementById('taskModalBody');
+            const taskModalTitle = document.getElementById('taskModalLabel');
+            taskModalBody.innerHTML = `
+                <p><strong>Description:</strong> ${taskDetails.description}</p>
+                <p><strong>Importance:</strong> ${taskDetails.importance}</p>
+                <p><strong>échéance:</strong> ${taskDetails.echeance}</p>
+
+            `;
+            taskModalTitle.innerHTML = `
+            <p><strong>Title:</strong> ${taskDetails.title}</p>
+
+        `;
+        })
+        .catch(error => console.error('Error fetching task details:', error));
 }
+
+
 
 // Function to validate a task
 function validateTask(taskId) {
     // Implement AJAX request to validate a task and update the task list
+    // set a click listener on deleteButton: on click , 
 }
 
 // Function to update a task
 function updateTask(taskId, newData) {
-    // Implement AJAX request to send updated task data to the backend and update the task list
+    // Implement AJAX request to send updated task data to the backend
+    fetch('backend.php?action=updateTask', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ taskId: taskId, newData: newData }),
+    })
+    .then(response => response.json())
+    .then(result => {
+        if (result.message === 'Task updated successfully') {
+            // Display a Bootstrap Toast message for success
+            showToast('Task updated successfully', 'success');
+        } else {
+            // Display a Bootstrap Toast message for failure
+            showToast('Failed to update task', 'danger');
+        }
+    })
+    .catch(error => {
+        console.error('Error updating task:', error);
+        // Display a Bootstrap Toast message for error
+        showToast('Error updating task', 'danger');
+    });
 }
+
+// Function to display Bootstrap Toast message
+function showToast(message, type) {
+    const toastContainer = document.getElementById('toastContainer');
+    const toast = new bootstrap.Toast(toastContainer, {
+        autohide: true,
+        delay: 3000, // Adjust the delay as needed
+    });
+    
+    // Update toast content and class based on the message type
+    toastContainer.innerHTML = `<div class="toast-body bg-${type}">${message}</div>`;
+    
+    // Show the toast
+    toast.show();
+}
+

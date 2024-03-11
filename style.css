@@ -25,7 +25,16 @@ h1, h2 {
 .liheader {
 position: relative;
 }
-.btn {
+.btn-danger {
     position: absolute;
     right: 0;
+}
+.lifooter{
+    position: relative;
+    height: 24px;
+    width: auto;
+}
+
+.description {
+    margin: 20px;
 }

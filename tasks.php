@@ -1,11 +1,16 @@
 <?php
 include 'config.php';
 
-function createTask($title, $description, $importance) {
+function createTask($title, $description, $importance, $echeance) {
     global $pdo;
-    $stmt = $pdo->prepare('INSERT INTO tasks (title, description, importance) VALUES (?, ?, ?)');
-    $stmt->execute([$title, $description, $importance]);
+
+    // Format the date to 'YYYY-MM-DD'
+    $formattedDate = date('Y-m-d', strtotime($echeance));
+
+    $stmt = $pdo->prepare('INSERT INTO tasks (title, description, importance, echeance) VALUES (?, ?, ?, ?)');
+    $stmt->execute([$title, $description, $importance, $formattedDate]);
 }
+
 
 function getTasks() {
     global $pdo;
@@ -13,10 +18,10 @@ function getTasks() {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-function updateTask($taskId, $title, $description, $importance) {
+function updateTask($taskId, $title, $description, $importance, $echeance) {
     global $pdo;
-    $stmt = $pdo->prepare('UPDATE tasks SET title = ?, description = ?, importance = ? WHERE id = ?');
-    $stmt->execute([$title, $description, $importance, $taskId]);
+    $stmt = $pdo->prepare('UPDATE tasks SET title = ?, description = ?, importance = ?, echeance = ? WHERE id = ?');
+    $stmt->execute([$title, $description, $importance, $echeance, $taskId]);
 }
 
 function deleteTask($taskId) {
