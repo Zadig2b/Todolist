@@ -3,10 +3,7 @@ include 'config.php';
 
 function createTask($title, $description, $importance, $echeance) {
     global $pdo;
-
-    // Format the date to 'YYYY-MM-DD'
     $formattedDate = date('Y-m-d', strtotime($echeance));
-
     $stmt = $pdo->prepare('INSERT INTO tasks (title, description, importance, echeance) VALUES (?, ?, ?, ?)');
     $stmt->execute([$title, $description, $importance, $formattedDate]);
 }

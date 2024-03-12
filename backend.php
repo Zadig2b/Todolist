@@ -64,6 +64,18 @@ if (isset($_GET['action'])) {
             break;
         default:
             echo json_encode(['error' => 'Invalid action']);
+
+case 'deleteTask':
+    if (isset($_GET['taskId'])) {
+        $taskId = $_GET['taskId'];
+        if (deleteTask($taskId)) {
+            echo json_encode(['success' => true, 'message' => 'Task deleted successfully']);
+        } else {
+            echo json_encode(['success' => false, 'error' => 'Failed to delete task']);
+        }
+    }
+    break;
+
     }
 } else {
     echo json_encode(['error' => 'Action parameter not set']);

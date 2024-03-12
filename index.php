@@ -21,7 +21,9 @@ include 'tasks.php';
 </div>
 <?php include 'form.php'; ?>
 <?php include 'modal.php'; ?>
-<div id="toastContainer" class="toast position-fixed bottom-0 end-0 p-3"></div>
+<div id="toastContainer" class="toast position-fixed bottom-0 end-0 p-3">
+    <div class="toast-body"></div>
+</div>
 
 <span class="badge text-bg-primary">Primary</span>
 <span class="badge text-bg-secondary">Secondary</span>

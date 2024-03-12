@@ -16,7 +16,7 @@
   <label class="form-label">Importance de la tâche:</label>
     <div class="form-check">
       <input type="radio" class="form-check-input" name="taskImportance" id="notImportant" value="not_important" checked>
-      <label class="form-check-label" for="notImportant">Pas important</label>
+      <label class="form-check-label" for="notImportant">Normal</label>
     </div>
     <div class="form-check">
       <input type="radio" class="form-check-input" name="taskImportance" id="important" value="important">
