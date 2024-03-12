@@ -100,11 +100,10 @@ document.addEventListener('click', function (event) {
                 }
                 
                 listItem.innerHTML = `
-                <div class=liheader>
+                
                     ${importanceBadge}
                     <strong>${task.title}</strong>
-                    ${editButton}${deleteButton}</div>
-                    <p class=description>${task.description}</p>
+                    ${deleteButton}
                 `;
                 taskList.appendChild(listItem);
             });
@@ -195,9 +194,18 @@ function showToast(message, type) {
 function viewTaskDetails(taskId) {
     // Open the Bootstrap modal
     const taskModal = new bootstrap.Modal(document.getElementById('taskModal'));
+
+    // Add an event listener for the modal hidden event
+    taskModal._element.addEventListener('hidden.bs.modal', function () {
+        // Remove the modal backdrop when the modal is hidden
+        const modalBackdrop = document.querySelector('.modal-backdrop');
+        if (modalBackdrop) {
+            modalBackdrop.remove();
+        }
+    });
+
     taskModal.show();
 
-    // Implement AJAX request to fetch task details and display them in the modal
     fetch(`backend.php?action=getTaskDetails&taskId=${taskId}`)
         .then(response => {
             if (!response.ok) {
@@ -206,22 +214,20 @@ function viewTaskDetails(taskId) {
             return response.json();
         })
         .then(taskDetails => {
-            // Display task details in the modal body
             const taskModalBody = document.getElementById('taskModalBody');
             const taskModalTitle = document.getElementById('taskModalLabel');
             taskModalBody.innerHTML = `
                 <p><strong>Description:</strong> ${taskDetails.description}</p>
                 <p><strong>Importance:</strong> ${taskDetails.importance}</p>
                 <p><strong>échéance:</strong> ${taskDetails.echeance}</p>
-
             `;
             taskModalTitle.innerHTML = `
-            <p><strong>Title:</strong> ${taskDetails.title}</p>
-
-        `;
+                <p><strong>Title:</strong> ${taskDetails.title}</p>
+            `;
         })
         .catch(error => console.error('Error fetching task details:', error));
 }
+
 
 
 
