@@ -15,6 +15,8 @@ include './src/repository/tasksRepository.php';
     <title>Document</title>
 </head>
 <body>
+<input type="hidden" id="userId" value="<?php echo isset($_SESSION['user_id']) ? $_SESSION['user_id'] : ''; ?>">
+
 <?php include './public/navbar.php'; ?>
 <div id="list">
 <h1>Liste des tâches</h1>

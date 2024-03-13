@@ -14,8 +14,8 @@ if (isset($_GET['action'])) {
         case 'createTask':
             $data = json_decode(file_get_contents('php://input'), true);
         
-            if (isset($data['title'], $data['description'], $data['importance'], $data['echeance'])) {
-                createTask($data['title'], $data['description'], $data['importance'], $data['echeance']);
+            if (isset($data['title'], $data['description'], $data['importance'], $data['echeance'], $data['user_id'])) {
+                createTask($data['title'], $data['description'], $data['importance'], $data['echeance'], $data['user_id']);
                 $newTaskId = $pdo->lastInsertId();  
                 $newTask = getTaskById($newTaskId); 
                 echo json_encode(['message' => 'Task created successfully', 'task' => $newTask]);

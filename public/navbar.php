@@ -43,7 +43,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form action="traitementInscription.php" method="post" id="inscriptionForm">
+        <form action="traitementInscription.php" method="post" id="inscriptionForm" onsubmit="return validateInscriptionForm()">
 
           <div class="mb-3">
             <label for="nom" class="form-label">Nom</label>
@@ -77,7 +77,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form id="connexionForm">
+        <form action="traitementConnexion.php" method="post" id="connexionForm">
           <div class="mb-3">
             <label for="email" class="form-label">Adresse Email</label>
             <input type="email" class="form-control" id="email" name="email" autocomplete="email" required>
