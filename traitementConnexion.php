@@ -10,8 +10,15 @@ class TraitementConnexion {
         $user = $userRepository->getUserById($userId);
 
         if ($user) {
+            session_start();
+
+            // stocke l'ID de l'utilisateur dans la session
+            $_SESSION['user_id'] = $userId;
+
             // L'utilisateur est connecté avec succès
             // Maintenant, récupérez les tâches de l'utilisateur
+            header("Location: index.php");
+
             $tasks = getTasksByUserId($userId);
             return $tasks;
         } else {
@@ -20,5 +27,4 @@ class TraitementConnexion {
         }
     }
 }
-
 ?>
