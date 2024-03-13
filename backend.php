@@ -5,7 +5,7 @@ ini_set('display_errors', 1);
 header('Content-Type: application/json');
 
 include 'config.php';
-include 'tasks.php';
+include './src/repository/tasksRepository.php';
 
 if (isset($_GET['action'])) {
     $action = $_GET['action'];

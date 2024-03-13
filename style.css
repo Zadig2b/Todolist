@@ -1,5 +1,6 @@
 body {
     margin: 20px;
+
 }
 
 strong {
@@ -9,8 +10,13 @@ h1, h2 {
     margin-bottom: 20px;
 
 }
+#form {
+    margin: 30px;
+   
+}
+
 #list {
-   margin-left: 30px;
+   margin: 30px;
 }
 
 .list-group {
@@ -18,17 +24,10 @@ h1, h2 {
     margin-bottom: 50px;
 }
 
-
-.list-group-item {
-
-}
-
 .liheader {
 position: relative;
 }
-.btn-success {
 
-}
 .lifooter{
     position: relative;
     height: 24px;

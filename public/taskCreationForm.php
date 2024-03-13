@@ -1,4 +1,4 @@
-<h2>Création de tâche</h2>
+<h1>Création de tâche</h1>
 <form id="taskForm">
   <div class="mb-3">
     <label for="taskTitle" class="form-label">Titre de la tâche</label>

@@ -1,5 +1,5 @@
 <?php
-include 'config.php';
+include './config.php';
 
 function createTask($title, $description, $importance, $echeance) {
     global $pdo;

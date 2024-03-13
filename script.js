@@ -20,29 +20,13 @@ document.addEventListener('click', function (event) {
 
         // Add 'active' class to the clicked item
         target.classList.add('active');
-        console.log("class active added");
 
         const taskId = target.dataset.taskId;
         viewTaskDetails(taskId);
     }
 });
 
-// Use event delegation at the document level for dynamically added elements
-document.addEventListener('click', function (event) {
-    let target = event.target;
-    if (target.classList.contains('list-group-item')) {
-        // Remove 'active' class from all items
-        document.querySelectorAll('.list-group-item').forEach(item => {
-            item.classList.remove('active');
-        });
-        // Add 'active' class to the clicked item
-        target.classList.add('active');
-        console.log("class active added");
 
-        const taskId = target.dataset.taskId; 
-        viewTaskDetails(taskId);
-    }
-});
 
 
 
@@ -248,7 +232,6 @@ function deleteTask(taskId) {
             } else {
                 // Afficher un message de toast Bootstrap en cas d'échec
                 showToast('Échec de la suppression de la tâche', 'danger');
-                console.log(result.message);
             }
         })
         .catch(error => {

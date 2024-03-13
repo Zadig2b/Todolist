@@ -1,6 +1,6 @@
 <?php
-include 'config.php';
-include 'tasks.php';
+include './config.php';
+include './src/repository/tasksRepository.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -15,24 +15,18 @@ include 'tasks.php';
     <title>Document</title>
 </head>
 <body>
-<?php include 'navbar.php'; ?>
+<?php include './public/navbar.php'; ?>
 <div id="list">
-<?php include 'list.php'; ?>
+<h1>Liste des tâches</h1>
+<ul class="list-group" id="taskList">
+</ul></div>
+<div id="form">
+<?php include './public/taskCreationForm.php'; ?>
 </div>
-<?php include 'form.php'; ?>
-<?php include 'modal.php'; ?>
+<?php include './public/modal.php'; ?>
 <div id="toastContainer" class="toast position-fixed bottom-0 end-0 p-3">
     <div class="toast-body"></div>
 </div>
-
-<span class="badge text-bg-primary">Primary</span>
-<span class="badge text-bg-secondary">Secondary</span>
-<span class="badge text-bg-success">Success</span>
-<span class="badge text-bg-danger">Danger</span>
-<span class="badge text-bg-warning">Warning</span>
-<span class="badge text-bg-info">Info</span>
-<span class="badge text-bg-light">Light</span>
-<span class="badge text-bg-dark">Dark</span>
 </body>
 </html>
 <script src="script.js"></script>
