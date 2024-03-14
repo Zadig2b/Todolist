@@ -55,5 +55,17 @@ class User
             return false;
         }
     }
+
+    public function getUserByEmailAndPassword($email, $password) {
+        try {
+            $stmt = $this->pdo->prepare("SELECT * FROM todolist_user WHERE Email = ? AND Mot_de_passe = ?");
+            $stmt->execute([$email, $password]);
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $user;
+        } catch (PDOException $e) {
+            echo "Erreur lors de la récupération de l'utilisateur : " . $e->getMessage();
+            return false;
+        }
+    }
 }
 

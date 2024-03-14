@@ -1,7 +1,19 @@
 <?php
+session_start();
 include './config.php';
 include './src/repository/tasksRepository.php';
-session_start();
+
+// Check if there's an error message in the session
+$error_message = isset($_SESSION['error_message']) ? $_SESSION['error_message'] : '';
+
+// Check if the user is logged in
+$user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : '';
+
+// If the user is logged in, fetch tasks for the logged-in user
+if ($user_id) {
+    $tasksRepository = new TaskRepository($pdo);
+    $tasks = $tasksRepository->getTasksByUserId($user_id);
+}
 ?>
 
 <!DOCTYPE html>
@@ -18,7 +30,7 @@ session_start();
 </head>
 <body>
 
-<?php include './public/navbar.php'; ?>
+<?php include './public/navbarConnected.php'; ?>
 <div id="list">
 <h1>Liste des tâches</h1>
 <ul class="list-group" id="taskList">
@@ -33,3 +45,5 @@ session_start();
 </body>
 </html>
 <script src="script.js"></script>
+<script src="auth.js"></script>
+

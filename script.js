@@ -1,8 +1,12 @@
 document.addEventListener('DOMContentLoaded', function () {
-    fetchTasks();
+    if (window.location.pathname === '/index.php') {
+        fetchTasks();
+    } else if (window.location.pathname === '/connected.php') {
+        fetchTasksById();
+    }
 });
 
-// Use event delegation at the document level for dynamically added elements
+
 document.addEventListener('click', function (event) {
     let target = event.target;
 
@@ -26,10 +30,6 @@ document.addEventListener('click', function (event) {
     }
 });
 
-
-
-
-
         function fetchTasks() {
             fetch('backend.php?action=fetchTasks')
                 .then(response => {
@@ -43,10 +43,21 @@ document.addEventListener('click', function (event) {
                 })
                 .catch(error => console.error('Error fetching tasks:', error));
         }
+
+        function fetchTasksById() {
+            fetch('backend.php?action=fetchTasksByUserId')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(tasks => {
+                    displayTasks(tasks);
+                })
+                .catch(error => console.error('Error fetching tasks:', error));
+        }
         
-
-
-
         function displayTasks(tasks) {
             const taskList = document.getElementById('taskList');
         
@@ -93,61 +104,62 @@ document.addEventListener('click', function (event) {
             });
         }
         
+        function createTaskFromInput() {
+            const title = document.getElementById('taskTitle').value;
+            const description = document.getElementById('taskDescription').value;
+            let importance;
+            let echeance = document.getElementById('taskDate').value;
+            const userId = document.getElementById('userId').value; // Retrieve user ID from hidden input
+            console.log('User ID:', userId);
+
+            const radioButtons = document.getElementsByName('taskImportance');
+            radioButtons.forEach(radio => {
+                if (radio.checked) {
+                    importance = radio.value;
+                }
+            });
+            createTask(title, description, importance, echeance, userId);
+        }
         
-
-function createTaskFromInput() {
-    const title = document.getElementById('taskTitle').value;
-    const description = document.getElementById('taskDescription').value;
-    let importance;
-    let echeance = document.getElementById('taskDate').value;
-    console.log(echeance);
-    const radioButtons = document.getElementsByName('taskImportance');
-    radioButtons.forEach(radio => {
-        if (radio.checked) {
-            importance = radio.value;
+        function createTask(title, description, importance, echeance, userId) {
+            if (!title.trim()) {
+                showToast('le titre d\'une tâche ne peut être vide', 'warning');
+                return;
+            }
+        
+            const taskData = {
+                title: title,
+                description: description,
+                importance: importance,
+                echeance: echeance,
+                user_id: userId
+            };
+        console.log(taskData);
+            fetch('backend.php?action=createTask', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(taskData)
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.message === 'Task created successfully' && result.task) {
+                    console.log(result.task); 
+                    showToast('Tâche créee avec succès', 'success');
+                    displayTasks([result.task]);
+                } else {
+                    console.error('Error creating task:', result.error);
+                    showToast(result.error, 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error creating task:', error);
+                showToast('An unexpected error occurred', 'error');
+            });
         }
-    });
-    createTask(title, description, importance, echeance);
-}
-
-function createTask(title, description, importance, echeance) {
-    if (!title.trim()) {
-        showToast('le titre d\'une tâche ne peut être vide', 'warning');
-        return;
-    }
-
-    const taskData = {
-        title: title,
-        description: description,
-        importance: importance,
-        echeance: echeance
-    };
-
-    fetch('backend.php?action=createTask', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(taskData)
-    })
-    .then(response => response.json())
-    .then(result => {
-        if (result.message === 'Task created successfully' && result.task) {
-            console.log(result.task); 
-            showToast('Tâche créee avec succès', 'success');
-            displayTasks([result.task]);
-        } else {
-            console.error('Error creating task:', result.error);
-            showToast(result.error, 'error');
-        }
-    })
-    .catch(error => {
-        console.error('Error creating task:', error);
-        showToast('An unexpected error occurred', 'error');
-    });
-}
-
-function showToast(message, type) {
+        
+        function showToast(message, type) {
     // Display Bootstrap toast message
     const toastContainer = document.getElementById('toastContainer');
     const toast = new bootstrap.Toast(toastContainer, {
@@ -171,11 +183,9 @@ function showToast(message, type) {
     }
 
     toast.show();
-}
+        }
 
-
-
-function viewTaskDetails(taskId) {
+        function viewTaskDetails(taskId) {
     // Open the Bootstrap modal
     const taskModal = new bootstrap.Modal(document.getElementById('taskModal'));
 
@@ -210,13 +220,9 @@ function viewTaskDetails(taskId) {
             `;
         })
         .catch(error => console.error('Error fetching task details:', error));
-}
+        }
 
-
-
-
-// Fonction pour supprimer une tâche
-function deleteTask(taskId) {
+        function deleteTask(taskId) {
     // Mettre en œuvre la requête AJAX pour supprimer une tâche et mettre à jour la liste des tâches
     fetch(`backend.php?action=deleteTask&taskId=${taskId}`, {
         method: 'DELETE', 
@@ -245,12 +251,9 @@ function deleteTask(taskId) {
     const taskItem = taskList.querySelector(`[data-task-id="${taskId}"]`);
     taskItem.remove();
     console.log("Tâche supprimée");
-}
+        }
 
-
-
-// Function to update a task
-function updateTask(taskId, newData) {
+        function updateTask(taskId, newData) {
     // Implement AJAX request to send updated task data to the backend
     fetch('backend.php?action=updateTask', {
         method: 'POST',
@@ -274,10 +277,9 @@ function updateTask(taskId, newData) {
         // Display a Bootstrap Toast message for error
         showToast('Error updating task', 'danger');
     });
-}
+        }
 
-// Function to display Bootstrap Toast message
-function showToast(message, type) {
+        function showToast(message, type) {
     const toastContainer = document.getElementById('toastContainer');
     const toast = new bootstrap.Toast(toastContainer, {
         autohide: true,
@@ -289,5 +291,5 @@ function showToast(message, type) {
     
     // Show the toast
     toast.show();
-}
+        }
 

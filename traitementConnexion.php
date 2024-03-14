@@ -4,27 +4,40 @@ require_once './src/repository/UserRepository.php';
 
 class TraitementConnexion {
     
-    public static function connectUser($userId) {
+    public static function connectUser($email, $password) {
         global $pdo;
         $userRepository = new User($pdo);
-        $user = $userRepository->getUserById($userId);
+        $user = $userRepository->getUserByEmailAndPassword($email, $password);
 
         if ($user) {
             session_start();
 
-            // stocke l'ID de l'utilisateur dans la session
-            $_SESSION['user_id'] = $userId;
+            // Store the user's ID in the session
+            $_SESSION['user_id'] = $user['id'];
 
-            // L'utilisateur est connecté avec succès
-            // Maintenant, récupérez les tâches de l'utilisateur
-            header("Location: index.php");
+            // Redirect the user to index.php on successful login
+            header("Location: connected.php");
+            exit(); // Make sure to exit after redirecting
 
-            $tasks = getTasksByUserId($userId);
-            return $tasks;
         } else {
-            // Erreur lors de la récupération de l'utilisateur
-            return false;
+            // If login fails, display a toast message
+            $_SESSION['error_message'] = "Connection failed. Please check your credentials.";
+            header("Location: index.php");
+            exit();
         }
     }
+}
+// Check if the form has been submitted
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    // Get the email and password from the form submission
+    $email = $_POST["email"] ?? "";
+    $password = $_POST["motDePasse"] ?? "";
+
+    // Call the method to process the user login
+    TraitementConnexion::connectUser($email, $password);
+} else {
+    // If the form hasn't been submitted, redirect to index.php
+    header("Location: index.php");
+    exit();
 }
 ?>

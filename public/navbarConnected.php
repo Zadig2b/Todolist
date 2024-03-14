@@ -6,16 +6,10 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Link</a>
-        </li>
       </ul>
 
-      <button class="btn btn-primary mx-2" data-bs-toggle="modal" data-bs-target="#inscriptionModal">Inscription</button>
-      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#connexionModal">Connexion</button>
+      <button class="btn btn-primary mx-2" data-bs-toggle="modal" data-bs-target="#inscriptionModal">Gestion du compte</button>
+      <button class="btn btn-primary"  id="décoBtn">Déconnexion</button>
     </div>
   </div>
 </nav>

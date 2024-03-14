@@ -6,6 +6,7 @@ header('Content-Type: application/json');
 
 include 'config.php';
 include './src/repository/tasksRepository.php';
+$taskRepository = new TaskRepository($pdo);
 
 if (isset($_GET['action'])) {
     $action = $_GET['action'];
@@ -15,9 +16,9 @@ if (isset($_GET['action'])) {
             $data = json_decode(file_get_contents('php://input'), true);
         
             if (isset($data['title'], $data['description'], $data['importance'], $data['echeance'], $data['user_id'])) {
-                createTask($data['title'], $data['description'], $data['importance'], $data['echeance'], $data['user_id']);
+                $taskId = $taskRepository->createTask($data['title'], $data['description'], $data['importance'], $data['echeance'], $data['user_id']);
                 $newTaskId = $pdo->lastInsertId();  
-                $newTask = getTaskById($newTaskId); 
+                $newTask = $taskRepository->getTaskById($newTaskId); 
                 echo json_encode(['message' => 'Task created successfully', 'task' => $newTask]);
             } else {
                 echo json_encode(['error' => 'Invalid data for creating task']);
@@ -37,7 +38,7 @@ if (isset($_GET['action'])) {
                     $importance = $newData['importance'] ?? null;
                     $echeance = $newData['echeance'] ?? null;
             
-                    if (updateTask($taskId, $title, $description, $importance, $echeance)) {
+                    if ($taskRepository->updateTask($taskId, $title, $description, $importance, $echeance)) {
                         echo json_encode(['message' => 'Task updated successfully']);
                     } else {
                         echo json_encode(['error' => 'Failed to update task']);
@@ -51,7 +52,7 @@ if (isset($_GET['action'])) {
             case 'getTaskDetails':
                 if (isset($_GET['taskId'])) {
                     $taskId = $_GET['taskId'];
-                    $taskDetails = getTaskById($taskId);
+                    $taskDetails = $taskRepository->getTaskById($taskId);
                     echo json_encode($taskDetails);
                 } else {
                     echo json_encode(['error' => 'Task ID not provided']);
@@ -59,16 +60,28 @@ if (isset($_GET['action'])) {
                 break;
 
         case 'fetchTasks':
-            $tasks = getTasks();
+            $tasks = $taskRepository->getTasks();
             echo json_encode($tasks);
             break;
+
+            case 'fetchTasksByUserId':
+                session_start(); 
+                if (isset($_SESSION['user_id'])) {
+                    $userId = $_SESSION['user_id']; 
+                    $tasks = $taskRepository->getTasksByUserId($userId);
+                    echo json_encode($tasks);
+                } else {
+                    echo json_encode(['error' => 'User ID not found in session']);
+                }            
+                break;
+          
         default:
             echo json_encode(['error' => 'Invalid action']);
 
 case 'deleteTask':
     if (isset($_GET['taskId'])) {
         $taskId = $_GET['taskId'];
-        if (deleteTask($taskId)) {
+        if ($taskRepository->deleteTask($taskId)) {
             echo json_encode(['success' => true, 'message' => 'Task deleted successfully']);
         } else {
             echo json_encode(['success' => false, 'error' => 'Failed to delete task']);

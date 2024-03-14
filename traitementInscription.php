@@ -18,7 +18,7 @@ class Traitement {
 
                 if ($result) {
                     // Redirect user to success page or display success message
-                    header("Location: inscription_success.php");
+                    header("Location: connected.php");
                     exit();
                 } else {
                     $errors[] = "Une erreur s'est produite lors de la création de l'utilisateur. Veuillez réessayer.";
