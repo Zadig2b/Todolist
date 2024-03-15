@@ -17,15 +17,31 @@ class Traitement {
                 $result = $userRepository->createUser($_POST['nom'], $_POST['prenom'], $_POST['motDePasse'], $_POST['email']);
 
                 if ($result) {
-                    // Redirect user to success page or display success message
-                    header("Location: connected.php");
-                    exit();
+                     $email = $_POST["email"] ?? "";
+                    $password = $_POST["motDePasse"] ?? "";
+                    $user = $userRepository->getUserByEmailAndPassword($email, $password);
+                    if ($user) {
+                        session_start();
+            
+                        // Store the user's ID in the session
+                        $_SESSION['user_id'] = $user['id'];
+            
+                        // Redirect the user to connected.php on successful login
+                        header("Location: connected.php");
+                        exit(); // Make sure to exit after redirecting
+            
+                    } else {
+                        // If login fails, display a toast message
+                        $_SESSION['error_message'] = "Connection failed. Please check your credentials.";
+                        header("Location: index.php");
+                        exit();
+                    }
                 } else {
                     $errors[] = "Une erreur s'est produite lors de la création de l'utilisateur. Veuillez réessayer.";
                 }
             } else {
                 header("Location: index.php?signup=0");
-
+                exit(); // Make sure to exit after redirection
             }
         }
 

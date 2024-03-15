@@ -1,7 +1,15 @@
 <?php
+session_start();
 include './config.php';
 include './src/repository/tasksRepository.php';
-session_start();
+
+// Check if there's an error message in the session
+$error_message = isset($_SESSION['error_message']) ? $_SESSION['error_message'] : '';
+// Clear the error message from the session after displaying it
+unset($_SESSION['error_message']);
+
+// Check if the user is logged in
+$user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : '';
 ?>
 
 <!DOCTYPE html>
@@ -28,8 +36,16 @@ session_start();
 </div>
 <?php include './public/modal.php'; ?>
 <div id="toastContainer" class="toast position-fixed bottom-0 end-0 p-3">
-    <div class="toast-body"></div>
+    <div class="toast-body">
+    <?php if (!empty($error_message)): ?>
+        <script>
+            showToast("<?php echo $error_message; ?>", 'error');
+        </script>
+    <?php endif; ?>
+    </div>
 </div>
 </body>
 </html>
 <script src="script.js"></script>
+<script src="auth.js"></script>
+

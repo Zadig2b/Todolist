@@ -15,7 +15,7 @@ class TraitementConnexion {
             // Store the user's ID in the session
             $_SESSION['user_id'] = $user['id'];
 
-            // Redirect the user to index.php on successful login
+            // Redirect the user to connected.php on successful login
             header("Location: connected.php");
             exit(); // Make sure to exit after redirecting
 

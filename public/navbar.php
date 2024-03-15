@@ -6,12 +6,6 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Link</a>
-        </li>
       </ul>
 
       <button class="btn btn-primary mx-2" data-bs-toggle="modal" data-bs-target="#inscriptionModal">Inscription</button>
@@ -63,7 +57,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form action="traitementConnexion.php" method="post" id="connexionForm">
+        <form action="traitementConnexion.php" method="post" id="connexionForm" onsubmit="return ValidateConnexion()">
           <div class="mb-3">
             <label for="email" class="form-label">Adresse Email</label>
             <input type="email" class="form-control" id="email" name="email" autocomplete="email" required>
@@ -72,6 +66,7 @@
             <label for="motDePasse" class="form-label">Mot de passe</label>
             <input type="password" class="form-control" id="motDePasse" name="motDePasse" autocomplete="current-password" required>
           </div>
+          <div class="mb-3" id="form-check"></div>
           <button type="submit" class="btn btn-primary">Se connecter</button>
         </form>
       </div>

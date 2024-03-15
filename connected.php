@@ -2,10 +2,10 @@
 session_start();
 include './config.php';
 include './src/repository/tasksRepository.php';
+include './src/repository/userRepository.php';
 
 // Check if there's an error message in the session
 $error_message = isset($_SESSION['error_message']) ? $_SESSION['error_message'] : '';
-
 // Check if the user is logged in
 $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : '';
 
@@ -45,5 +45,5 @@ if ($user_id) {
 </body>
 </html>
 <script src="script.js"></script>
-<script src="auth.js"></script>
+<script src="connected.js"></script>
 

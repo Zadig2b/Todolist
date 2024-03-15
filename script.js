@@ -109,17 +109,30 @@ document.addEventListener('click', function (event) {
             const description = document.getElementById('taskDescription').value;
             let importance;
             let echeance = document.getElementById('taskDate').value;
-            const userId = document.getElementById('userId').value; // Retrieve user ID from hidden input
-            console.log('User ID:', userId);
-
-            const radioButtons = document.getElementsByName('taskImportance');
-            radioButtons.forEach(radio => {
-                if (radio.checked) {
-                    importance = radio.value;
-                }
-            });
-            createTask(title, description, importance, echeance, userId);
+        
+            // Send an AJAX request to fetch the user ID from the server
+            fetch('backendUser.php', {
+                method: 'GET',
+                credentials: 'include' // Include cookies in the request
+            })
+            .then(response => response.json())
+            .then(data => {
+                const userId = data.userId;
+                console.log('User ID:', userId);
+        
+                const radioButtons = document.getElementsByName('taskImportance');
+                radioButtons.forEach(radio => {
+                    if (radio.checked) {
+                        importance = radio.value;
+                    }
+                });
+        
+                // Call the createTask function with the retrieved user ID
+                createTask(title, description, importance, echeance, userId);
+            })
+            .catch(error => console.error('Error fetching user ID:', error));
         }
+        
         
         function createTask(title, description, importance, echeance, userId) {
             if (!title.trim()) {
@@ -150,7 +163,7 @@ document.addEventListener('click', function (event) {
                     displayTasks([result.task]);
                 } else {
                     console.error('Error creating task:', result.error);
-                    showToast(result.error, 'error');
+                    showToast(result.error, 'warning');
                 }
             })
             .catch(error => {
