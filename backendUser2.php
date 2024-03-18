@@ -1,16 +1,16 @@
 <?php
 require_once 'config.php';
 require_once './src/repository/UserRepository.php';
-
+session_start();
 // Vérifiez si une action est spécifiée dans la requête
 if (isset($_GET['action'])) {
     // Exécutez l'action appropriée en fonction de ce qui est demandé
     switch ($_GET['action']) {
         case 'fetchUserById':
             // Vérifiez si l'ID de l'utilisateur est spécifié dans la requête
-            if (isset($_GET['userId'])) {
+            if (isset($_SESSION['user_id'])) {
                 // Récupérez l'ID de l'utilisateur à partir de la requête
-                $userId = $_GET['userId'];
+                $userId = $_SESSION['user_id'];
 
                 // Créez une instance du référentiel d'utilisateurs
                 $userRepository = new User($pdo);

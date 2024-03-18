@@ -46,7 +46,7 @@ class User
 
     public function getUserById($userId){
         try{
-            $stmt = $this->pdo->prepare("SELECT * FROM todolist_user WHERE Id = ?");
+            $stmt = $this->pdo->prepare("SELECT * FROM todolist_user WHERE id = ?");
             $stmt->execute([$userId]);
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
             return $user;
@@ -64,6 +64,17 @@ class User
             return $user;
         } catch (PDOException $e) {
             echo "Erreur lors de la récupération de l'utilisateur : " . $e->getMessage();
+            return false;
+        }
+    }
+    public function getUserInfoById($userId) {
+        try {
+            $stmt = $this->pdo->prepare("SELECT Nom, Prénom, mot_de_passe, Email FROM todolist_user WHERE Id = ?");
+            $stmt->execute([$userId]);
+            $userInfo = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $userInfo;
+        } catch (PDOException $e) {
+            echo "Erreur lors de la récupération des informations de l'utilisateur : " . $e->getMessage();
             return false;
         }
     }

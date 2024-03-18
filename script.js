@@ -109,7 +109,7 @@ document.addEventListener('click', function (event) {
             let echeance = document.getElementById('taskDate').value;
         
             // Send an AJAX request to fetch the user ID from the server
-            fetch('backendUser.php', {
+            fetch('backendUser.php?action=createTaskUserId', {
                 method: 'GET',
                 credentials: 'include' // Include cookies in the request
             })

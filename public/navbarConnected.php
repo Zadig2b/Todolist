@@ -48,26 +48,40 @@
   </div>
 </div>
 <div id=returnUser></div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 <script>
-// Récupérez l'ID de l'utilisateur à partir de la session PHP
-var userId = <?php echo isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 'null'; ?>;
-
-if (userId) {
-    // Effectuez une requête AJAX pour récupérer les informations de l'utilisateur
-    fetch('backendUser2.php?action=fetchUserById&userId=' + userId)
-        .then(response => response.json())
-        .then(user => {
-            // Pré-remplir les champs de saisie avec les informations de l'utilisateur
-            document.getElementById('nom').value = user.nom;
-            document.getElementById('prenom').value = user.prenom;
-            document.getElementById('emailRegistration').value = user.email;
-            let returnUser = document.getElementById('returnUser');
-            returnUser.innerHTML = user
-            
-
-        })
-        .catch(error => console.error('Erreur lors de la récupération des informations de l\'utilisateur:', error));
-} else {
-    console.error('ID utilisateur non disponible');
+// Function to set user information
+function setUserInfo() {
+    // Send an AJAX request to fetch the user information from the server
+    fetch('backendUser2.php?action=fetchUserById', {
+        method: 'GET',
+        credentials: 'include' // Include cookies in the request
+    })
+    .then(response => response.json())
+    .then(data => {
+        const userId = data.id;
+        console.log('User ID:', userId);
+        
+        // Extract individual fields from the user data
+        const nom = data.Nom;
+        const prenom = data.Prénom;
+        const mdp = data.Mot_de_passe;
+        const email = data.Email;
+        
+        // Set the content of each field in the corresponding HTML element
+        document.getElementById('nom').value = nom;
+        document.getElementById('prenom').value = prenom;
+        document.getElementById('emailRegistration').value = email;
+        
+        let returnUser = document.getElementById('returnUser');
+        returnUser.innerHTML = JSON.stringify(data);
+    })
+    .catch(error => console.error('Error fetching user data:', error));
 }
+
+// Trigger setUserInfo() function when modal is shown
+$('#inscriptionModal').on('shown.bs.modal', function () {
+    setUserInfo();
+});
 </script>
