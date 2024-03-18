@@ -72,11 +72,9 @@ document.addEventListener('click', function (event) {
                 listItem.setAttribute('data-task-title', task.title)
                 listItem.setAttribute('data-task-description', task.description)
                 listItem.setAttribute('data-task-importance', task.importance)
-                listItem.setAttribute('data-task-status', task.status)
                 listItem.setAttribute('data-task-created-at', task.created_at)
                 listItem.setAttribute('data-task-updated-at', task.updated_at)
-                listItem.setAttribute('data-task-completed-at', task.completed_at)
-                listItem.setAttribute('data-task-complete-on', task.completed_at)
+
 
 
                 let importanceBadge = '';

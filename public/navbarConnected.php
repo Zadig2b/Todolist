@@ -14,16 +14,16 @@
   </div>
 </nav>
 
-<!-- Modal Inscription -->
+<!-- Modal Gestion de Compte -->
 <div class="modal fade" id="inscriptionModal" tabindex="-1" aria-labelledby="inscriptionModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="inscriptionModalLabel">Formulaire d'inscription</h5>
+        <h5 class="modal-title" id="inscriptionModalLabel">Formulaire d'édition</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form action="traitementInscription.php" method="post" id="inscriptionForm" onsubmit="return validateInscriptionForm()">
+        <form action="traitementEdition.php" method="post" id="EditForm" onsubmit="return validateEditForm()">
 
           <div class="mb-3">
             <label for="nom" class="form-label">Nom</label>
@@ -41,34 +41,33 @@
             <label for="email" class="form-label">Email</label>
             <input type="email" class="form-control" id="emailRegistration" name="email" autocomplete="email">
           </div>
-          <button type="submit" class="btn btn-primary">S'inscrire</button>
+          <button type="submit" class="btn btn-primary">Enregistrer</button>
         </form>
       </div>
     </div>
   </div>
 </div>
+<div id=returnUser></div>
+<script>
+// Récupérez l'ID de l'utilisateur à partir de la session PHP
+var userId = <?php echo isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 'null'; ?>;
 
-<!-- Modal Connexion -->
-<div class="modal fade" id="connexionModal" tabindex="-1" aria-labelledby="connexionModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="connexionModalLabel">Formulaire de connexion</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form action="traitementConnexion.php" method="post" id="connexionForm">
-          <div class="mb-3">
-            <label for="email" class="form-label">Adresse Email</label>
-            <input type="email" class="form-control" id="email" name="email" autocomplete="email" required>
-          </div>
-          <div class="mb-3">
-            <label for="motDePasse" class="form-label">Mot de passe</label>
-            <input type="password" class="form-control" id="motDePasse" name="motDePasse" autocomplete="current-password" required>
-          </div>
-          <button type="submit" class="btn btn-primary">Se connecter</button>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
+if (userId) {
+    // Effectuez une requête AJAX pour récupérer les informations de l'utilisateur
+    fetch('backendUser2.php?action=fetchUserById&userId=' + userId)
+        .then(response => response.json())
+        .then(user => {
+            // Pré-remplir les champs de saisie avec les informations de l'utilisateur
+            document.getElementById('nom').value = user.nom;
+            document.getElementById('prenom').value = user.prenom;
+            document.getElementById('emailRegistration').value = user.email;
+            let returnUser = document.getElementById('returnUser');
+            returnUser.innerHTML = user
+            
+
+        })
+        .catch(error => console.error('Erreur lors de la récupération des informations de l\'utilisateur:', error));
+} else {
+    console.error('ID utilisateur non disponible');
+}
+</script>
