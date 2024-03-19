@@ -23,7 +23,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form action="traitementEdition.php" method="post" id="EditForm" onsubmit="return validateEditForm()">
+        <form  method="post" id="EditForm" onsubmit="return updateUserInBackend()">
 
           <div class="mb-3">
             <label for="nom" class="form-label">Nom</label>
@@ -84,4 +84,45 @@ function setUserInfo() {
 $('#inscriptionModal').on('shown.bs.modal', function () {
     setUserInfo();
 });
+
+function updateUserInBackend() {
+    // Get form data
+    const nom = document.getElementById('nom').value;
+    const prenom = document.getElementById('prenom').value;
+    const email = document.getElementById('emailRegistration').value;
+
+    // Construct request body
+    const requestBody = {
+        nom: nom,
+        prenom: prenom,
+        email: email
+    };
+
+    // Send POST request to backend
+    fetch('traitementEdition.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestBody)
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        }
+        throw new Error('Network response was not ok.');
+    })
+    .then(data => {
+        // Handle response from backend
+        // Redirect to a success page or display a success message
+        window.location.href = 'connected.php'; // Redirect to success page
+    })
+    .catch(error => {
+        // Handle errors
+        console.error('Error updating user information:', error);
+        console.log(console.error('Error updating user information:', error));
+        // Display error message to the user
+    });
+}
+
 </script>

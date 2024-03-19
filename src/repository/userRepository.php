@@ -21,21 +21,22 @@ class User
         }
     }
 
-    public function updateUser($userId, $nom, $prenom, $email)
-    {
-        try {
-            $stmt = $this->pdo->prepare("UPDATE todolist_user SET Nom = ?, Prénom = ?, Email = ? WHERE Id = ?");
-            $stmt->execute([$nom, $prenom, $email, $userId]);
-            return true;
-        } catch (PDOException $e) {
-            echo "Erreur lors de la mise à jour de l'utilisateur : " . $e->getMessage();
-            return false;
-        }
+    public function updateUser($nom, $prenom, $email, $userId)
+{
+    try {
+        $stmt = $this->pdo->prepare("UPDATE todolist_user SET Nom = ?, Prénom = ?, Email = ? WHERE id = ?");
+        $stmt->execute([$nom, $prenom, $email, $userId]);
+        return true;
+    } catch (PDOException $e) {
+        echo "Erreur lors de la mise à jour de l'utilisateur : " . $e->getMessage();
+        return false;
     }
+}
+
     public function deleteUser($userId)
     {
         try {
-            $stmt = $this->pdo->prepare("DELETE FROM todolist_user WHERE Id = ?");
+            $stmt = $this->pdo->prepare("DELETE FROM todolist_user WHERE id = ?");
             $stmt->execute([$userId]);
             return true;
         } catch (PDOException $e) {
