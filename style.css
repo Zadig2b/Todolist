@@ -17,6 +17,7 @@ h1, h2 {
 
 #list {
    margin: 30px;
+   /* width: fit-content; */
 }
 
 .list-group {
@@ -38,9 +39,16 @@ position: relative;
     margin: 20px;
 }
 
-.btn-success {
+.list-group-item {
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ font-weight: bold;
+}
+
+ /* .btn-success {
     position: absolute;
     right: 0;
     top: 0;
 
-}
+}  */

@@ -35,11 +35,11 @@
           </div>
           <div class="mb-3">
             <label for="motDePasse" class="form-label">Mot de passe</label>
-            <input type="password" class="form-control" id="motDePasseRegistration" name="motDePasse" autocomplete="current-password" required>
+            <input type="password" class="form-control" id="motDePasse" name="motDePasse" autocomplete="current-password" required>
           </div>
           <div class="mb-3">
             <label for="email" class="form-label">Email</label>
-            <input type="email" class="form-control" id="emailRegistration" name="email" autocomplete="email">
+            <input type="email" class="form-control" id="email" name="email" autocomplete="email">
           </div>
           <button type="submit" class="btn btn-primary">Enregistrer</button>
         </form>
@@ -49,80 +49,10 @@
 </div>
 <div id=returnUser></div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
 <script>
-// Function to set user information
-function setUserInfo() {
-    // Send an AJAX request to fetch the user information from the server
-    fetch('backendUser2.php?action=fetchUserById', {
-        method: 'GET',
-        credentials: 'include' // Include cookies in the request
-    })
-    .then(response => response.json())
-    .then(data => {
-        const userId = data.id;
-        console.log('User ID:', userId);
-        
-        // Extract individual fields from the user data
-        const nom = data.Nom;
-        const prenom = data.Prénom;
-        const mdp = data.Mot_de_passe;
-        const email = data.Email;
-        
-        // Set the content of each field in the corresponding HTML element
-        document.getElementById('nom').value = nom;
-        document.getElementById('prenom').value = prenom;
-        document.getElementById('emailRegistration').value = email;
-        
-        let returnUser = document.getElementById('returnUser');
-        returnUser.innerHTML = JSON.stringify(data);
-    })
-    .catch(error => console.error('Error fetching user data:', error));
-}
-
 // Trigger setUserInfo() function when modal is shown
 $('#inscriptionModal').on('shown.bs.modal', function () {
     setUserInfo();
 });
-
-function updateUserInBackend() {
-    // Get form data
-    const nom = document.getElementById('nom').value;
-    const prenom = document.getElementById('prenom').value;
-    const email = document.getElementById('emailRegistration').value;
-
-    // Construct request body
-    const requestBody = {
-        nom: nom,
-        prenom: prenom,
-        email: email
-    };
-
-    // Send POST request to backend
-    fetch('traitementEdition.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(requestBody)
-    })
-    .then(response => {
-        if (response.ok) {
-            return response.json();
-        }
-        throw new Error('Network response was not ok.');
-    })
-    .then(data => {
-        // Handle response from backend
-        // Redirect to a success page or display a success message
-        window.location.href = 'connected.php'; // Redirect to success page
-    })
-    .catch(error => {
-        // Handle errors
-        console.error('Error updating user information:', error);
-        console.log(console.error('Error updating user information:', error));
-        // Display error message to the user
-    });
-}
-
 </script>
+<script src="user.js"></script>

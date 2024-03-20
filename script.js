@@ -65,7 +65,6 @@ document.addEventListener('click', function (event) {
                 let listItem = document.createElement('li');
                 listItem.classList.add('list-group-item');
                 let editButton = '<button type="button" class="btn btn-secondary">Edit</button>'    
-                editButton.style = 'position:absolute; right:0px'           
                 let deleteButton = `<button id="deletebtn-${task.id}" type="button" class="btn btn-success">Validée</button> `;
 
                 listItem.setAttribute('data-task-id', task.id)
@@ -95,7 +94,7 @@ document.addEventListener('click', function (event) {
                 listItem.innerHTML = `
                 
                     ${importanceBadge}
-                    <strong>${task.title}</strong>
+                    ${task.title}
                     ${deleteButton}
                 `;
                 taskList.appendChild(listItem);
@@ -219,15 +218,30 @@ document.addEventListener('click', function (event) {
             return response.json();
         })
         .then(taskDetails => {
+            let importanceBadge = '';
+                switch (taskDetails.importance) {
+                    case 'not_important':
+                        importanceBadge = '<span class="badge text-bg-primary">Normal</span>';
+                        break;
+                    case 'important':
+                        importanceBadge = '<span class="badge text-bg-warning">Important</span>';
+                        break;
+                    case 'urgent':
+                        importanceBadge = '<span class="badge text-bg-danger">Urgent</span>';
+                        break;
+                    default:
+                        break;
+                }
+
             const taskModalBody = document.getElementById('taskModalBody');
             const taskModalTitle = document.getElementById('taskModalLabel');
             taskModalBody.innerHTML = `
+                <p> <strong>${importanceBadge}</strong></p>
                 <p><strong>Description:</strong> ${taskDetails.description}</p>
-                <p><strong>Importance:</strong> ${taskDetails.importance}</p>
                 <p><strong>échéance:</strong> ${taskDetails.echeance}</p>
             `;
             taskModalTitle.innerHTML = `
-                <p><strong>Title:</strong> ${taskDetails.title}</p>
+                <p><strong>Titre:</strong> ${taskDetails.title}</p>
             `;
         })
         .catch(error => console.error('Error fetching task details:', error));

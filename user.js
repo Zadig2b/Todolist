@@ -1,6 +1,6 @@
 function setUserInfo() {
     // Send an AJAX request to fetch the user information from the server
-    fetch('backendUser2.php?action=fetchUserById', {
+    fetch('backendUser.php?action=fetchUserById', {
         method: 'GET',
         credentials: 'include' // Include cookies in the request
     })
@@ -18,10 +18,50 @@ function setUserInfo() {
         // Set the content of each field in the corresponding HTML element
         document.getElementById('nom').value = nom;
         document.getElementById('prenom').value = prenom;
-        document.getElementById('emailRegistration').value = email;
+        document.getElementById('email').value = email;
         
         let returnUser = document.getElementById('returnUser');
         returnUser.innerHTML = JSON.stringify(data);
     })
     .catch(error => console.error('Error fetching user data:', error));
+}
+
+function updateUserInBackend() {
+    // Get form data
+    const nom = document.getElementById('nom').value;
+    const prenom = document.getElementById('prenom').value;
+    const email = document.getElementById('email').value;
+
+    // Construct request body
+    const requestBody = {
+        nom: nom,
+        prenom: prenom,
+        email: email
+    };
+
+    // Send POST request to backend
+    fetch('traitementEdition.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestBody)
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        }
+        throw new Error('Network response was not ok.');
+    })
+    .then(data => {
+        // Handle response from backend
+        // Redirect to a success page or display a success message
+        window.location.href = 'connected.php'; // Redirect to success page
+    })
+    .catch(error => {
+        // Handle errors
+        console.error('Error updating user information:', error);
+        console.log(console.error('Error updating user information:', error));
+        // Display error message to the user
+    });
 }

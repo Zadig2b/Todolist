@@ -13,7 +13,7 @@
     <input type="date" class="form-control" id="taskDate" required>
   </div>
   <div class="mb-3">
-  <label class="form-label">Importance de la tâche:</label>
+  <label class="form-label">Importance de la tâche:
     <div class="form-check">
       <input type="radio" class="form-check-input" name="taskImportance" id="notImportant" value="not_important" checked>
       <label class="form-check-label" for="notImportant">Normal</label>
@@ -27,5 +27,6 @@
       <label class="form-check-label" for="urgent">Urgent</label>
     </div>
   </div>
+  </label>
   <button type="button" class="btn btn-primary" onclick="createTaskFromInput()">Create Task</button>
 </form>
