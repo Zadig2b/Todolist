@@ -41,6 +41,7 @@
             <label for="email" class="form-label">Email</label>
             <input type="email" class="form-control" id="emailRegistration" name="email" autocomplete="email">
           </div>
+          <div id="errorContainer"></div>
           <button type="submit" class="btn btn-primary">S'inscrire</button>
         </form>
       </div>

@@ -48,4 +48,6 @@ $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : '';
 </html>
 <script src="script.js"></script>
 <script src="auth.js"></script>
+<script src="checkForm.js"></script>
+
 

@@ -20,8 +20,8 @@ function setUserInfo() {
         document.getElementById('prenom').value = prenom;
         document.getElementById('email').value = email;
         
-        let returnUser = document.getElementById('returnUser');
-        returnUser.innerHTML = JSON.stringify(data);
+        // let returnUser = document.getElementById('returnUser');
+        // returnUser.innerHTML = JSON.stringify(data);
     })
     .catch(error => console.error('Error fetching user data:', error));
 }
@@ -65,3 +65,7 @@ function updateUserInBackend() {
         // Display error message to the user
     });
 }
+
+document.getElementById('décoBtn').addEventListener('click', function() {
+    window.location.href = 'deconnexion.php';
+});

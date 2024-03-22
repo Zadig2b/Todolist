@@ -13,26 +13,23 @@ class Traitement {
             if (empty($errors)) {
                 $userRepository = new User($pdo);
                 
-                // Create the user using UserRepository
+                // Creation de l'utilisateur dans la base de données
                 $result = $userRepository->createUser($_POST['nom'], $_POST['prenom'], $_POST['motDePasse'], $_POST['email']);
 
                 if ($result) {
-                     $email = $_POST["email"] ?? "";
+                    $email = $_POST["email"] ?? "";
                     $password = $_POST["motDePasse"] ?? "";
                     $user = $userRepository->getUserByEmailAndPassword($email, $password);
                     if ($user) {
                         session_start();
-            
-                        // Store the user's ID in the session
+                 // Démarrage de la session
                         $_SESSION['user_id'] = $user['id'];
-            
-                        // Redirect the user to connected.php on successful login
+                 // Stockage de l'ID de l'utilisateur dans la session
                         header("Location: connected.php");
-                        exit(); // Make sure to exit after redirecting
+                        exit(); 
             
                     } else {
-                        // If login fails, display a toast message
-                        $_SESSION['error_message'] = "Connection failed. Please check your credentials.";
+                        $_SESSION['error_message'] = "échec de la connexion utilisateur";
                         header("Location: index.php");
                         exit();
                     }
@@ -41,7 +38,7 @@ class Traitement {
                 }
             } else {
                 header("Location: index.php?signup=0");
-                exit(); // Make sure to exit after redirection
+                exit(); 
             }
         }
 

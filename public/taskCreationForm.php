@@ -1,5 +1,6 @@
-<h1>Création de tâche</h1>
 <form id="taskForm">
+<h1>Création de tâche</h1>
+
   <div class="mb-3">
     <label for="taskTitle" class="form-label">Titre de la tâche</label>
     <input type="text" class="form-control" id="taskTitle" required>
@@ -25,7 +26,7 @@
     <div class="form-check">
       <input type="radio" class="form-check-input" name="taskImportance" id="urgent" value="urgent">
       <label class="form-check-label" for="urgent">Urgent</label>
-    </div>
+  </div>
   </div>
   </label>
   <button type="button" class="btn btn-primary" onclick="createTaskFromInput()">Create Task</button>

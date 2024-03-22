@@ -38,6 +38,9 @@ if ($user_id) {
 <div id="form">
 <?php include './public/taskCreationForm.php'; ?>
 </div>
+<div id="form">
+<?php include './public/CategoryCreationForm.php'; ?>
+</div>
 <?php include './public/modal.php'; ?>
 <div id="toastContainer" class="toast position-fixed bottom-0 end-0 p-3">
     <div class="toast-body"></div>
@@ -45,5 +48,6 @@ if ($user_id) {
 </body>
 </html>
 <script src="script.js"></script>
-<script src="connected.js"></script>
+<script src="user.js"></script>
+<script src="fetchCategory.js"></script>
 

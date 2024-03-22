@@ -11,18 +11,15 @@ document.addEventListener('click', function (event) {
     let target = event.target;
 
     if (target.classList.contains('btn-success')) {
-        // Get the task ID from the button's ID
         const taskId = target.id.split('-')[1];
         deleteTask(taskId);
     }
 
     if (target.classList.contains('list-group-item')) {
-        // Remove 'active' class from all items
         document.querySelectorAll('.list-group-item').forEach(item => {
             item.classList.remove('active');
         });
 
-        // Add 'active' class to the clicked item
         target.classList.add('active');
 
         const taskId = target.dataset.taskId;
@@ -107,10 +104,9 @@ document.addEventListener('click', function (event) {
             let importance;
             let echeance = document.getElementById('taskDate').value;
         
-            // Send an AJAX request to fetch the user ID from the server
             fetch('backendUser.php?action=createTaskUserId', {
                 method: 'GET',
-                credentials: 'include' // Include cookies in the request
+                credentials: 'include' 
             })
             .then(response => response.json())
             .then(data => {
@@ -124,7 +120,6 @@ document.addEventListener('click', function (event) {
                     }
                 });
         
-                // Call the createTask function with the retrieved user ID
                 createTask(title, description, importance, echeance, userId);
             })
             .catch(error => console.error('Error fetching user ID:', error));
@@ -170,17 +165,15 @@ document.addEventListener('click', function (event) {
         }
         
         function showToast(message, type) {
-    // Display Bootstrap toast message
     const toastContainer = document.getElementById('toastContainer');
     const toast = new bootstrap.Toast(toastContainer, {
         autohide: true,
-        delay: 3000 // Adjust the duration of the toast message
+        delay: 3000 
     });
 
     const toastBody = toastContainer.querySelector('.toast-body');
     toastBody.innerText = message;
 
-    // Apply Bootstrap toast color based on type (success, error, etc.)
     toastContainer.classList.remove('bg-success', 'bg-danger', 'bg-info', 'bg-warning');
     if (type === 'success') {
         toastContainer.classList.add('bg-success');
@@ -196,12 +189,9 @@ document.addEventListener('click', function (event) {
         }
 
         function viewTaskDetails(taskId) {
-    // Open the Bootstrap modal
     const taskModal = new bootstrap.Modal(document.getElementById('taskModal'));
 
-    // Add an event listener for the modal hidden event
     taskModal._element.addEventListener('hidden.bs.modal', function () {
-        // Remove the modal backdrop when the modal is hidden
         const modalBackdrop = document.querySelector('.modal-backdrop');
         if (modalBackdrop) {
             modalBackdrop.remove();
@@ -279,8 +269,7 @@ document.addEventListener('click', function (event) {
         }
 
         function updateTask(taskId, newData) {
-    // Implement AJAX request to send updated task data to the backend
-    fetch('backend.php?action=updateTask', {
+        fetch('backend.php?action=updateTask', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -290,16 +279,13 @@ document.addEventListener('click', function (event) {
     .then(response => response.json())
     .then(result => {
         if (result.message === 'Task updated successfully') {
-            // Display a Bootstrap Toast message for success
             showToast('Task updated successfully', 'success');
         } else {
-            // Display a Bootstrap Toast message for failure
             showToast('Failed to update task', 'danger');
         }
     })
     .catch(error => {
         console.error('Error updating task:', error);
-        // Display a Bootstrap Toast message for error
         showToast('Error updating task', 'danger');
     });
         }
@@ -308,13 +294,11 @@ document.addEventListener('click', function (event) {
     const toastContainer = document.getElementById('toastContainer');
     const toast = new bootstrap.Toast(toastContainer, {
         autohide: true,
-        delay: 3000, // Adjust the delay as needed
+        delay: 3000, 
     });
     
-    // Update toast content and class based on the message type
     toastContainer.innerHTML = `<div class="toast-body bg-${type}">${message}</div>`;
     
-    // Show the toast
     toast.show();
         }
 

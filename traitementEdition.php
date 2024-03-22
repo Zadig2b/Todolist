@@ -20,7 +20,6 @@ class TraitementEdition {
             $prenom = $data['prenom'] ?? '';
             $email = $data['email'] ?? '';
 
-            echo "<div id='returnUser'> Nom: $nom, Prénom: $prenom, Email: $email</div>";
             error_log("Received data - Nom: $nom, Prénom: $prenom, Email: $email");
             error_log('Received POST data: ' . print_r($data, true)); 
 
