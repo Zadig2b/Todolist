@@ -1,21 +1,21 @@
 function setUserInfo() {
-    // Send an AJAX request to fetch the user information from the server
+    // Envoyer une requête AJAX pour récupérer les informations utilisateur du serveur
     fetch('backendUser.php?action=fetchUserById', {
         method: 'GET',
-        credentials: 'include' // Include cookies in the request
+        credentials: 'include' 
     })
     .then(response => response.json())
     .then(data => {
         const userId = data.id;
         console.log('User ID:', userId);
         
-        // Extract individual fields from the user data
+        // Extraire des champs individuels des données utilisateur
         const nom = data.Nom;
         const prenom = data.Prénom;
         const mdp = data.Mot_de_passe;
         const email = data.Email;
         
-        // Set the content of each field in the corresponding HTML element
+        // Définir le contenu de chaque champ dans l'élément HTML correspondant
         document.getElementById('nom').value = nom;
         document.getElementById('prenom').value = prenom;
         document.getElementById('email').value = email;
@@ -54,15 +54,14 @@ function updateUserInBackend() {
         throw new Error('Network response was not ok.');
     })
     .then(data => {
-        // Handle response from backend
-        // Redirect to a success page or display a success message
-        window.location.href = 'connected.php'; // Redirect to success page
+        // Gérer la réponse du backend
+        //Redirection vers une page de réussite ou affichage d'un message de réussite
+        window.location.href = 'connected.php'; 
     })
     .catch(error => {
-        // Handle errors
         console.error('Error updating user information:', error);
         console.log(console.error('Error updating user information:', error));
-        // Display error message to the user
+       
     });
 }
 

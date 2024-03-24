@@ -4,12 +4,12 @@ include './config.php';
 include './src/repository/tasksRepository.php';
 include './src/repository/userRepository.php';
 
-// Check if there's an error message in the session
+// Vérifiez s'il y a un message d'erreur dans la session
 $error_message = isset($_SESSION['error_message']) ? $_SESSION['error_message'] : '';
-// Check if the user is logged in
+// Vérifiez si l'utilisateur est connecté
 $user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : '';
 
-// If the user is logged in, fetch tasks for the logged-in user
+//Si l'utilisateur est connecté, récupère les tâches pour l'utilisateur connecté
 if ($user_id) {
     $tasksRepository = new TaskRepository($pdo);
     $tasks = $tasksRepository->getTasksByUserId($user_id);
@@ -35,10 +35,10 @@ if ($user_id) {
 <h1>Liste des tâches</h1>
 <ul class="list-group" id="taskList">
 </ul></div>
-<div id="form">
+<div id="TaskformDiv">
 <?php include './public/taskCreationForm.php'; ?>
 </div>
-<div id="form">
+<div id="CatformDiv">
 <?php include './public/CategoryCreationForm.php'; ?>
 </div>
 <?php include './public/modal.php'; ?>

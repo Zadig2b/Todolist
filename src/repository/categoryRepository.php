@@ -13,11 +13,9 @@ class Category {
         $success = $stmt->execute([$name, $img]);
     
         if ($success) {
-            // Log successful insertion
-            error_log('Category inserted successfully. Name: ' . $name . ', Img: ' . $img);
+            error_log('Catégorie insérée avec succès. Name: ' . $name . ', Img: ' . $img);
         } else {
-            // Log insertion failure
-            error_log('Failed to insert category. Name: ' . $name . ', Img: ' . $img);
+            error_log('Échec de l\'insertion de la catégorie. Name: ' . $name . ', Img: ' . $img);
         }
     }
     
@@ -44,6 +42,5 @@ class Category {
     }
 }
 
-// Instantiate CategoryRepository
 $categoryRepository = new Category($pdo);
 ?>

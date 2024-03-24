@@ -1,8 +1,10 @@
 document.addEventListener('DOMContentLoaded', function () {
     if (window.location.pathname === '/index.php') {
-        fetchTasks();
+        // fetchTasks();
     } else if (window.location.pathname === '/connected.php') {
         fetchTasksById();
+        popImg();
+        popImgTask();
     }
 });
 
@@ -26,6 +28,116 @@ document.addEventListener('click', function (event) {
         viewTaskDetails(taskId);
     }
 });
+
+function popImgTask() {
+    const imgContainer = document.querySelector('.task-img-container .row');
+    
+    fetch('public/assets/img/')
+        .then(response => response.text())
+        .then(data => {
+            //Extrait les noms de fichiers image de la liste des répertoires
+            const filenames = data.match(/href="([^"]+)/g)
+                .map(match => match.replace('href="', ''));
+
+            //Filtre les chemins de répertoire et ne conserve que les noms de fichiers image            
+                const imageFilenames = filenames.filter(filename => {
+                return /\.(jpg|jpeg|png|gif)$/i.test(filename);
+            });
+
+            //Crée des éléments d'image et les ajoute au conteneur
+            imageFilenames.forEach(filename => {
+                const img = document.createElement('img');
+                img.src = 'public/assets/img/' + filename;
+                img.alt = filename;
+                const id = filename.replace(/\.[^/.]+$/, ''); //Extrait le nom du fichier sans extension comme identifiant
+                img.className = 'img0';
+                img.id = id;
+                img.addEventListener('click', selectImgTask);
+
+                const col = document.createElement('div');
+                col.className = 'col-md-2 mb-3';
+                col.appendChild(img);
+
+                imgContainer.appendChild(col);
+            });
+        })
+        .catch(error => console.error('Error loading images:', error));
+}
+let selectedImgId;
+function selectImgTask(event) {
+    const allImages = document.querySelectorAll('.img0');
+    allImages.forEach(img => {
+        img.style.border = 'none';
+        img.style.width = '50px';
+        img.removeAttribute('cat-selected');
+    });
+    //Stocke l'identifiant de l'image sélectionnée
+    selectedImgId = event.target.id;
+
+    const selectedImg = event.target;
+    selectedImg.style.border = '4px solid rgb(147, 147, 236)';
+    selectedImg.style.borderRadius = '10px';
+    selectedImg.style.padding = '5px';
+    selectedImg.style.margin = '5px';
+    selectedImg.style.width = '70px';
+    selectedImg.setAttribute('cat-selected', 'true');
+}
+
+function popImg() {
+    const imgContainer = document.querySelector('.img-container .row');
+    
+    fetch('public/assets/img/')
+        .then(response => response.text())
+        .then(data => {
+            // Extract image filenames from directory listing
+            const filenames = data.match(/href="([^"]+)/g)
+                .map(match => match.replace('href="', ''));
+
+            // Filter out directory paths and keep only image filenames
+            const imageFilenames = filenames.filter(filename => {
+                return /\.(jpg|jpeg|png|gif)$/i.test(filename);
+            });
+
+            // Create image elements and append to container
+            imageFilenames.forEach(filename => {
+                const img = document.createElement('img');
+                img.src = 'public/assets/img/' + filename;
+                img.alt = filename;
+                const id = filename.replace(/\.[^/.]+$/, ''); // Extract filename without extension as id
+                img.className = 'img';
+                img.id = id;
+                img.addEventListener('click', selectImg);
+
+                const col = document.createElement('div');
+                col.className = 'col-md-2 mb-3';
+                col.appendChild(img);
+
+                imgContainer.appendChild(col);
+            });
+        })
+        .catch(error => console.error('Error loading images:', error));
+}
+
+function selectImg(event) {
+    const allImages = document.querySelectorAll('.img');
+    allImages.forEach(img => {
+        img.style.border = 'none';
+        img.style.width = '50px';
+        img.removeAttribute('data-selected');
+
+        
+
+    });
+    const selectedImg = event.target;
+    selectedImg.style.border = '4px solid rgb(147, 147, 236)';
+    selectedImg.style.borderRadius = '10px';
+    selectedImg.style.padding = '5px';
+    selectedImg.style.margin = '5px';
+    selectedImg.style.width = '70px';
+    selectedImg.setAttribute('data-selected', 'true');
+}
+
+//--------------------------------------------------------------Task Front Management-----------------------
 
         function fetchTasks() {
             fetch('backend.php?action=fetchTasks')
@@ -61,7 +173,6 @@ document.addEventListener('click', function (event) {
             tasks.forEach(task => {
                 let listItem = document.createElement('li');
                 listItem.classList.add('list-group-item');
-                let editButton = '<button type="button" class="btn btn-secondary">Edit</button>'    
                 let deleteButton = `<button id="deletebtn-${task.id}" type="button" class="btn btn-success">Validée</button> `;
 
                 listItem.setAttribute('data-task-id', task.id)
@@ -70,6 +181,7 @@ document.addEventListener('click', function (event) {
                 listItem.setAttribute('data-task-importance', task.importance)
                 listItem.setAttribute('data-task-created-at', task.created_at)
                 listItem.setAttribute('data-task-updated-at', task.updated_at)
+                listItem.setAttribute('data-task-category', task.cat)
 
 
 
@@ -103,6 +215,7 @@ document.addEventListener('click', function (event) {
             const description = document.getElementById('taskDescription').value;
             let importance;
             let echeance = document.getElementById('taskDate').value;
+
         
             fetch('backendUser.php?action=createTaskUserId', {
                 method: 'GET',
@@ -112,6 +225,7 @@ document.addEventListener('click', function (event) {
             .then(data => {
                 const userId = data.userId;
                 console.log('User ID:', userId);
+                console.log('cat Id:', selectedImgId);
         
                 const radioButtons = document.getElementsByName('taskImportance');
                 radioButtons.forEach(radio => {
@@ -120,13 +234,13 @@ document.addEventListener('click', function (event) {
                     }
                 });
         
-                createTask(title, description, importance, echeance, userId);
+                createTask(title, description, importance, echeance, userId, selectedImgId);
             })
             .catch(error => console.error('Error fetching user ID:', error));
         }
         
         
-        function createTask(title, description, importance, echeance, userId) {
+        function createTask(title, description, importance, echeance, userId, catId) {
             if (!title.trim()) {
                 showToast('le titre d\'une tâche ne peut être vide', 'warning');
                 return;
@@ -137,7 +251,8 @@ document.addEventListener('click', function (event) {
                 description: description,
                 importance: importance,
                 echeance: echeance,
-                user_id: userId
+                user_id: userId,
+                cat_id: catId,
             };
         console.log(taskData);
             fetch('backend.php?action=createTask', {
@@ -247,12 +362,15 @@ document.addEventListener('click', function (event) {
     })
         .then(response => response.json())
         .then(result => {
-            if (result.message === 'Tâche supprimée avec succès') {
+            if (result) {
                 // Afficher un message de toast Bootstrap pour le succès
                 showToast('Tâche supprimée avec succès', 'success');
+                console.log(result);
             } else {
                 // Afficher un message de toast Bootstrap en cas d'échec
                 showToast('Échec de la suppression de la tâche', 'danger');
+                            console.error('Failed to delete task:', result.message);
+
             }
         })
         .catch(error => {

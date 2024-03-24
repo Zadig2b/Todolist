@@ -28,6 +28,11 @@
       <label class="form-check-label" for="urgent">Urgent</label>
   </div>
   </div>
+    <div class="mb-3">
+  <div class="task-img-container">
+    <div class="row">
+    </div>
+  </div>
   </label>
   <button type="button" class="btn btn-primary" onclick="createTaskFromInput()">Create Task</button>
 </form>

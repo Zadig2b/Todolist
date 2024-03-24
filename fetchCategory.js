@@ -23,7 +23,7 @@ function createCategoryFromInput() {
 
 function createCategory(name, img) {
     if (!name.trim()) {
-        showToast('The name of a category cannot be empty', 'warning');
+        showToast('Le nom d\'une catégorie ne peut pas être vide', 'warning');
         return;
     }
 
@@ -43,7 +43,7 @@ function createCategory(name, img) {
     .then(result => {
         if (result.message === 'Category created successfully') {
             console.log(categoryData);
-            showToast('Category created successfully', 'success');
+            showToast('Catégorie créée avec succès', 'success');
         } else {
             console.error('Error creating category:', result.error);
             showToast(result.error, 'warning');

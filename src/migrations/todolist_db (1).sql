@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : mer. 13 mars 2024 à 13:47
+-- Généré le : ven. 22 mars 2024 à 15:35
 -- Version du serveur : 8.2.0
 -- Version de PHP : 8.2.13
 
@@ -31,8 +31,9 @@ DROP TABLE IF EXISTS `category`;
 CREATE TABLE IF NOT EXISTS `category` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `img` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -48,17 +49,11 @@ CREATE TABLE IF NOT EXISTS `tasks` (
   `importance` enum('not_important','important','urgent') COLLATE utf8mb4_general_ci DEFAULT 'not_important',
   `completed` tinyint(1) DEFAULT '0',
   `echeance` date DEFAULT NULL,
-  `category_id` int DEFAULT NULL,
+  `id_utilisateur` int NOT NULL,
+  `cat_id` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_category_id` (`category_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=159 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Déchargement des données de la table `tasks`
---
-
-INSERT INTO `tasks` (`id`, `title`, `description`, `importance`, `completed`, `echeance`, `category_id`) VALUES
-(158, 'fza', 'fza', 'important', 0, '1970-01-01', NULL);
+  KEY `fk_id_utilisateur` (`id_utilisateur`)
+) ENGINE=MyISAM AUTO_INCREMENT=296 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 

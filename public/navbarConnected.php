@@ -34,10 +34,6 @@
             <input type="text" class="form-control" id="prenom" name="prenom" autocomplete="first-name">
           </div>
           <div class="mb-3">
-            <label for="motDePasse" class="form-label">Mot de passe</label>
-            <input type="password" class="form-control" id="motDePasse" name="motDePasse" autocomplete="current-password" required>
-          </div>
-          <div class="mb-3">
             <label for="email" class="form-label">Email</label>
             <input type="email" class="form-control" id="email" name="email" autocomplete="email">
           </div>

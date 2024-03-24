@@ -8,10 +8,10 @@ class TaskRepository {
         $this->pdo = $pdo;
     }
 
-    public function createTask($title, $description, $importance, $echeance, $userId) {
+    public function createTask($title, $description, $importance, $echeance, $userId, $catId) {
         $formattedDate = date('Y-m-d', strtotime($echeance));
-        $stmt = $this->pdo->prepare('INSERT INTO tasks (title, description, importance, echeance, id_utilisateur ) VALUES (?, ?, ?, ?, ?)');
-        $stmt->execute([$title, $description, $importance, $formattedDate, $userId]);
+        $stmt = $this->pdo->prepare('INSERT INTO tasks (title, description, importance, echeance, id_utilisateur, cat_id) VALUES (?, ?, ?, ?, ?, ?)');
+        $stmt->execute([$title, $description, $importance, $formattedDate, $userId, $catId]);
     }
 
     public function getTasks() {
@@ -48,6 +48,5 @@ class TaskRepository {
     }
 }
 
-// Instantiate TaskRepository
 $taskRepository = new TaskRepository($pdo);
 ?>
