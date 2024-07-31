@@ -55,7 +55,7 @@ function popImgTask() {
                 img.addEventListener('click', selectImgTask);
 
                 const col = document.createElement('div');
-                col.className = 'col-md-2 mb-3';
+                col.className = 'col-md-2 col-sm-3 col-3 mb-3';
                 col.appendChild(img);
 
                 imgContainer.appendChild(col);
@@ -109,7 +109,7 @@ function popImg() {
                 img.addEventListener('click', selectImg);
 
                 const col = document.createElement('div');
-                col.className = 'col-md-2 mb-3';
+                col.className = 'col-md-2 col-sm-3 col-3 mb-3';
                 col.appendChild(img);
 
                 imgContainer.appendChild(col);
